@@ -102,15 +102,22 @@ function App() {
         return () => clearInterval(interval);
     }, [gameState]);
 
+    // State to track if we should join once connected
+    const [pendingJoin, setPendingJoin] = useState(false);
+
+    // Effect to join game once WebSocket is connected
+    useEffect(() => {
+        if (pendingJoin && isConnected) {
+            joinGame();
+            setPendingJoin(false);
+        }
+    }, [pendingJoin, isConnected, joinGame]);
+
     const handleJoinGame = useCallback((enteredUsername) => {
         setUsername(enteredUsername);
         connect(enteredUsername);
-
-        // Small delay to ensure connection is established
-        setTimeout(() => {
-            joinGame();
-        }, 500);
-    }, [connect, joinGame]);
+        setPendingJoin(true);  // Will trigger join once connected
+    }, [connect]);
 
     const handleColumnClick = useCallback((column) => {
         if (gameState !== GAME_STATES.PLAYING) return;
