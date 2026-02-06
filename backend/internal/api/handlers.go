@@ -32,6 +32,7 @@ func NewHandlers(store *storage.PostgresStore, mm *matchmaker.Matchmaker, produc
 // RegisterRoutes registers API routes
 func (h *Handlers) RegisterRoutes(r chi.Router) {
 	r.Get("/leaderboard", h.GetLeaderboard)
+	r.Delete("/leaderboard", h.ClearLeaderboard)
 	r.Get("/stats/{username}", h.GetPlayerStats)
 	r.Get("/analytics", h.GetAnalytics)
 	r.Get("/status", h.GetStatus)
@@ -48,6 +49,19 @@ func (h *Handlers) GetLeaderboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJSON(w, entries)
+}
+
+// ClearLeaderboard deletes all games and resets the leaderboard
+func (h *Handlers) ClearLeaderboard(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	
+	err := h.store.ClearAllGames(ctx)
+	if err != nil {
+		http.Error(w, "Failed to clear leaderboard", http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, map[string]string{"message": "Leaderboard cleared successfully"})
 }
 
 // GetPlayerStats returns statistics for a specific player

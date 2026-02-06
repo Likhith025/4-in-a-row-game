@@ -265,6 +265,12 @@ func (s *PostgresStore) GetAnalytics(ctx context.Context) (*GameAnalytics, error
 	return &analytics, nil
 }
 
+// ClearAllGames deletes all games from the database (resets leaderboard)
+func (s *PostgresStore) ClearAllGames(ctx context.Context) error {
+	_, err := s.pool.Exec(ctx, "DELETE FROM games")
+	return err
+}
+
 // Close closes the database connection pool
 func (s *PostgresStore) Close() {
 	s.pool.Close()

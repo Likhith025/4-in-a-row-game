@@ -231,24 +231,26 @@ function App() {
                             />
 
                             {gameState === GAME_STATES.FINISHED && (
-                                <div className="card game-over">
-                                    <h2 className={isDraw ? 'draw' : didIWin ? 'win' : 'lose'}>
-                                        {isDraw ? "It's a Draw!" : didIWin ? 'You Won! 🎉' : 'You Lost'}
-                                    </h2>
-                                    <p>
-                                        {result === 'forfeit'
-                                            ? 'Opponent forfeited the game'
-                                            : isDraw
-                                                ? 'The board is full'
-                                                : `${winner} connected 4 in a row!`}
-                                    </p>
-                                    <div className="game-over-buttons">
-                                        <button className="btn btn-primary" onClick={handleNewGame}>
-                                            Play Again
-                                        </button>
-                                        <button className="btn btn-secondary" onClick={handlePlayAgain}>
-                                            Back to Lobby
-                                        </button>
+                                <div className="modal-overlay">
+                                    <div className="modal-content">
+                                        <h2 className={isDraw ? 'draw' : didIWin ? 'win' : 'lose'}>
+                                            {isDraw ? "It's a Draw!" : didIWin ? 'You Won! 🎉' : 'You Lost 😔'}
+                                        </h2>
+                                        <p>
+                                            {result === 'forfeit'
+                                                ? 'Opponent forfeited the game'
+                                                : isDraw
+                                                    ? 'The board is full'
+                                                    : `${winner} connected 4 in a row!`}
+                                        </p>
+                                        <div className="modal-buttons">
+                                            <button className="btn btn-primary" onClick={handleNewGame}>
+                                                Play Again
+                                            </button>
+                                            <button className="btn btn-secondary" onClick={handlePlayAgain}>
+                                                Back to Lobby
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             )}
